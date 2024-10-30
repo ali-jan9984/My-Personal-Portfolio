@@ -2,10 +2,23 @@ import userModel from "@/models/user.model";
 import { NextRequest,NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
+import fs from 'fs';
+import cloudinaryConfig from "@/lib/cloudinary";
 export async function POST(request:NextRequest)
 {
     dbConnect();
     const body = await request.json();
+
+    const profileLocalPath = request.files?.profile?.path?.[0]?.filepath;
+    cloudinaryConfig();
+    const profile = await cloudinaryConfig.uploader.upload(profileLocalPath,{
+        fo
+    })
+    if(profileLocalPath){
+        const profile = fs.readFileSync(profileLocalPath);
+        body.profile = profile;
+    }
+
 
     if(!body.name || !body.email || !body.password)
     {

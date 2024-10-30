@@ -1,27 +1,22 @@
-import cloudinary from 'next-cloudinary';
+import { v2 as cloudinary} from 'cloudinary';
 
-const cloudinaryConfig = cloudinary.config({
+// Configure Cloudinary using the Node.js SDK, not `next-cloudinary`.
+cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-},{
-    useCDN: false,
     secure: true,
-    api_base: 'https://api.cloudinary.com'
 });
 
-if (!cloudinaryConfig){
-    throw new Error("Cloudinary config not found");
-}
-
-const uploadOnCloudinary = async (LocalFilePath:any)=>{
+// Async function to upload files to Cloudinary
+const uploadOnCloudinary = async (localFilePath) => {
     try {
-        const result = await cloudinary.uploader.upload(LocalFilePath);
+        const result = await cloudinary.uploader.upload(localFilePath);
         return result;
     } catch (error) {
-        console.error(error);
+        console.error("Cloudinary upload error:", error);
         return null;
     }
 }
 
-export default cloudinaryConfig;
+export default uploadOnCloudinary;
