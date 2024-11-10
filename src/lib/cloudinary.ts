@@ -9,7 +9,7 @@ cloudinary.config({
 });
 
 // Async function to upload files to Cloudinary
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath:string) => {
     try {
         const result = await cloudinary.uploader.upload(localFilePath);
         return result;
