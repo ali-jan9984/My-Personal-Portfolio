@@ -1,24 +1,58 @@
-import * as React from "react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+"use client"
+
+import * as React from "react"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/Components/ui/card";
+} from "@/Components/ui/card"
 import {
+  ChartConfig,
   ChartContainer,
-} from "@/Components/ui/chart";
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/Components/ui/chart"
 
-export const description = "Advanced interactive bar chart";
+export const description = "An interactive bar chart"
 
+// Updated data with current dates up to November 11, 2024
 const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 260, mobile: 180 },
-  { date: "2024-04-03", desktop: 290, mobile: 210 },
-  // Add more data points as needed
-];
+  { date: "2024-09-11", desktop: 222, mobile: 150 },
+  { date: "2024-09-12", desktop: 97, mobile: 180 },
+  { date: "2024-09-13", desktop: 167, mobile: 120 },
+  { date: "2024-09-14", desktop: 242, mobile: 260 },
+  { date: "2024-09-15", desktop: 373, mobile: 290 },
+  { date: "2024-09-16", desktop: 301, mobile: 340 },
+  { date: "2024-09-17", desktop: 245, mobile: 180 },
+  { date: "2024-09-18", desktop: 409, mobile: 320 },
+  { date: "2024-09-19", desktop: 59, mobile: 110 },
+  { date: "2024-09-20", desktop: 261, mobile: 190 },
+  { date: "2024-10-01", desktop: 327, mobile: 350 },
+  { date: "2024-10-02", desktop: 292, mobile: 210 },
+  { date: "2024-10-03", desktop: 342, mobile: 380 },
+  { date: "2024-10-04", desktop: 137, mobile: 220 },
+  { date: "2024-10-05", desktop: 120, mobile: 170 },
+  { date: "2024-10-06", desktop: 138, mobile: 190 },
+  { date: "2024-10-07", desktop: 446, mobile: 360 },
+  { date: "2024-10-08", desktop: 364, mobile: 410 },
+  { date: "2024-10-09", desktop: 243, mobile: 180 },
+  { date: "2024-10-10", desktop: 89, mobile: 150 },
+  { date: "2024-11-01", desktop: 138, mobile: 230 },
+  { date: "2024-11-02", desktop: 387, mobile: 290 },
+  { date: "2024-11-03", desktop: 215, mobile: 250 },
+  { date: "2024-11-04", desktop: 75, mobile: 130 },
+  { date: "2024-11-05", desktop: 383, mobile: 420 },
+  { date: "2024-11-06", desktop: 122, mobile: 180 },
+  { date: "2024-11-07", desktop: 315, mobile: 240 },
+  { date: "2024-11-08", desktop: 454, mobile: 380 },
+  { date: "2024-11-09", desktop: 165, mobile: 220 },
+  { date: "2024-11-10", desktop: 293, mobile: 310 },
+  { date: "2024-11-11", desktop: 247, mobile: 190 },
+]
 
 const chartConfig = {
   views: {
@@ -26,16 +60,16 @@ const chartConfig = {
   },
   desktop: {
     label: "Desktop",
-    color: "#4285F4", // Custom blue color for desktop
+    color: "hsl(var(--chart-1))",
   },
   mobile: {
     label: "Mobile",
-    color: "#FBBC05", // Custom yellow color for mobile
+    color: "hsl(var(--chart-2))",
   },
-};
+} satisfies ChartConfig
 
 export function Updown() {
-  const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("desktop");
+  const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("desktop")
 
   const total = React.useMemo(
     () => ({
@@ -43,90 +77,86 @@ export function Updown() {
       mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0),
     }),
     []
-  );
+  )
 
   return (
-    <Card className="rounded-lg shadow-lg bg-gradient-to-br from-blue-500 to-indigo-500 text-white">
+    <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6">
-          <CardTitle className="text-2xl font-semibold">Advanced Visitor Statistics</CardTitle>
+          <CardTitle>Bar Chart - Interactive</CardTitle>
           <CardDescription>
-            Track trends and insights for the last 3 months.
+            Showing total visitors for the last 3 months
           </CardDescription>
         </div>
         <div className="flex">
           {["desktop", "mobile"].map((key) => {
-            const chart = key as keyof typeof chartConfig;
+            const chart = key as keyof typeof chartConfig
             return (
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className={`relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-l sm:border-t-0 sm:px-8 sm:py-6 ${activeChart === chart ? 'bg-blue-700 text-white shadow-md' : 'bg-white text-blue-900'}`}
+                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-8 sm:py-6"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-xs uppercase">{chartConfig[chart].label}</span>
+                <span className="text-xs text-muted-foreground">
+                  {chartConfig[chart].label}
+                </span>
                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total.toLocaleString()}
+                  {total[key as keyof typeof total].toLocaleString()}
                 </span>
               </button>
-            );
+            )
           })}
         </div>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">
-        <div className="aspect-auto h-[250px] w-full">
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  });
-                }}
-              />
-              <YAxis />
-              <Tooltip
-                contentStyle={{ backgroundColor: "#333", color: "#fff", borderRadius: "8px" }}
-                labelFormatter={(value) => {
-                  return new Date(value).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  });
-                }}
-                formatter={(value, name) => [`${value.toLocaleString()}`, name]}
-              />
-              <Legend
-                verticalAlign="top"
-                height={36}
-                wrapperStyle={{
-                  color: "white",
-                  fontWeight: "bold",
-                  paddingBottom: "20px",
-                }}
-              />
-              <Bar
-                dataKey={activeChart}
-                fill={chartConfig[activeChart].color}
-                radius={[8, 8, 0, 0]}
-                animationDuration={700}
-                onMouseOver={(data, index) => console.log(`Hovered on ${data.date}`)}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[250px] w-full"
+        >
+          <BarChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={(value) => {
+                const date = new Date(value)
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })
+              }}
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  className="w-[150px]"
+                  nameKey="views"
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })
+                  }}
+                />
+              }
+            />
+            <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
+          </BarChart>
+        </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }
+

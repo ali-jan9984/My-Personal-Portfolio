@@ -1,9 +1,12 @@
 'use client'
-
+import {useForm, SubmitHandler} from 'react-hook-form';
 const page = () => {
+
+  const {register, handleSubmit} = useForm();
+  const onsubmit: SubmitHandler
+
   return (
     <div>
-      this is the sign-up page
     </div>
   )
 }
