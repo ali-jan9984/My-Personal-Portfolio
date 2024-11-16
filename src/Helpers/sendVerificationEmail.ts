@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import EmailTemplate from '../Components/emailTemplate';
+import EmailTemplate from '../components/emailTemplate';
 
 const resend = new Resend('re_fcghBeCx_ULz4kp2bQRcpaXKfa8RuXVns');
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaTree, FaLeaf, FaRocket, FaMeteor, FaStar, FaSpaceShuttle, FaFish, FaWater, FaSun } from 'react-icons/fa';
 import alijanImage from '../../public/alijan.jpg';
 import { useState } from 'react';
-import { Button } from '@/Components/ui/button';
+import { Button } from '@/components/ui/button';
 const themes:any = {
   space: {
     name: 'Space',

@@ -1,7 +1,7 @@
 'use client';
 import Navbar from './Navbar/page';
-import Footer from '@/Components/footer';
-import Hero from '@/Components/Hero';
+import Footer from '@/components/footer';
+import Hero from '@/components/Hero';
 
 
 function HomePage() {
