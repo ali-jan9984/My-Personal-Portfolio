@@ -50,7 +50,7 @@ const Page = () => {
         title: "Success",
         description: response.data.message
       });
-      router.replace(`/verify/${data.userName}`);
+      router.replace(`/sign-in`);
     } catch (error) {
       const errorMessage = axios.isAxiosError(error) ? error.response?.data.message || "Something went wrong" : "Unexpected error occurred";
       toast({

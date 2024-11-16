@@ -31,8 +31,7 @@ export const AuthOptions: NextAuthOptions = {
                 return { 
                     _id: user._id, 
                     email: user.email, 
-                    name: user.name, 
-                    isVerified: user.isVerified, 
+                    name: user.userName,
                     expires: '' 
                 };
             }
@@ -58,7 +57,7 @@ export const AuthOptions: NextAuthOptions = {
         }),
     ],
     pages: {
-        signIn: '/auth/signin',
+        signIn: '/auth/sign-in',
     },
     session: {
         strategy: 'jwt',
@@ -90,7 +89,7 @@ export const AuthOptions: NextAuthOptions = {
             return token;
         },
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: 'WV65v/qRQ4i8Cu36crHFWet+3cGhPEavypBEbnhvPqs=',
 };
 
 export default NextAuth(AuthOptions);

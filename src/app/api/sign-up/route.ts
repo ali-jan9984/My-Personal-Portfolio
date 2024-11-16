@@ -1,32 +1,43 @@
 import { NextResponse, NextRequest } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import userModel from "@/models/user.model";
-import bcrypt from 'bcryptjs';
-import sendVerificationEmail from "@/Helpers/sendVerificationEmail";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
+    if (request.method !== "POST") {
+      return NextResponse.json(
+        { message: "Method not allowed" },
+        { status: 405 }
+      );
+    }
+
     await dbConnect();
     const body = await request.json();
-    const { email, name: userName, password } = body;
+    const { email, userName, password } = body;
 
-    // Validate email
+    if (!email || !userName || !password) {
+      return NextResponse.json(
+        { message: "All fields are required" },
+        { status: 400 }
+      );
+    }
+
     if (!email.includes("@")) {
       return NextResponse.json(
         { message: "Invalid email address" },
         { status: 400 }
       );
     }
-    // Validate name
-    const invalidNamePattern = /[!@#$%^&*]/;
+
+    const invalidNamePattern = /[^a-zA-Z0-9_.-]/;
     if (invalidNamePattern.test(userName)) {
       return NextResponse.json(
-        { message: "Invalid name" },
+        { message: "Name contains invalid characters" },
         { status: 400 }
       );
     }
 
-    // Validate password length
     if (password.length < 8) {
       return NextResponse.json(
         { message: "Password must be at least 8 characters long" },
@@ -34,72 +45,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user already exists by name
-    const existingUserByName = await userModel.findOne({ userName, isVerified: true });
-    if (existingUserByName) {
+    const existingUser = await userModel.findOne({
+      userName,email
+    });
+
+    if (existingUser) {
+      const field = existingUser.userName === userName ? "UserName" : "Email";
       return NextResponse.json(
-        { success: false, message: "UserName already exists. Please try again" },
-        { status: 400 }
+        { success: false, message: `${field} already exists. Please try again` },
+        { status: 409 }
       );
     }
 
-    // Check if user already exists by email
-    const existingUserByEmail = await userModel.findOne({ email });
-    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-    if (existingUserByEmail) {
-      if (existingUserByEmail.isVerified) {
-        return NextResponse.json(
-          {
-            success: false,
-            message: "Verified user already exists. Please try again"
-          },
-          { status: 400 }
-        );
-      } else {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        existingUserByEmail.password = hashedPassword;
-        existingUserByEmail.verifyCodeExpiry = new Date(Date.now() + 3600000); // 1 hour
-        existingUserByEmail.verifyCode = verifyCode;
-        await existingUserByEmail.save();
-      }
-    } else {
-      // Create a new user
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
-      await userModel.create({
-        userName,
-        email,
-        password: hashedPassword,
-        verifyCode: verifyCode,
-        verifyCodeExpiry: expiryDate
-      });
-    }
-    console.log(email);
-    // Send verification email
-    const emailResponse = await sendVerificationEmail(email, userName, verifyCode);
-    if (emailResponse.success === false) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:"Error sending verification email"
-        },
-        { status: 500 }
-      );
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await userModel.create({
+      userName,
+      email: email.toLowerCase(),
+      password: hashedPassword,
+    });
 
     return NextResponse.json(
-      { success: true, message: "User created successfully please verify your code" },
+      { success: true, message: "User created successfully. Please login." },
       { status: 201 }
     );
-
   } catch (error) {
-    console.error(error);
+    console.error("Error during user creation:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Error creating user"
-      },
+      { success: false, message: "Error creating user" },
       { status: 500 }
     );
   }
