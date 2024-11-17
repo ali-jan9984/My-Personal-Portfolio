@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Pen, Folder, Github, Linkedin } from 'lucide-react'; // Icons for portfolio-related items
 import { useState, useEffect } from 'react';
+import { FaBars, FaSignInAlt } from "react-icons/fa";
 
 export default function AboutPage() {
   const text = "Ali Jan is an amazing developer with a deep passion for coding. He thrives on creating dynamic and efficient solutions, whether for frontend or backend development. His expertise in various web technologies makes him a versatile developer, and his innovative ideas continue to inspire those around him. Ali has contributed to several successful projects, always delivering high-quality work on time.";
@@ -31,7 +32,7 @@ export default function AboutPage() {
           {Array.from({ length: 5 }).map((_, index) => (
             <motion.div
               key={index}
-              className="w-4 bg-gradient-to-b from-green-500 to-blue-500 rounded-t-lg"
+              className="w-3 bg-white rounded-t-lg"
               initial={{ height: 0 }}
               animate={{ height: `${Math.random() * 60 + 40}%` }}
               transition={{ duration: 2, delay: index * 0.2 }}
@@ -41,8 +42,8 @@ export default function AboutPage() {
 
         {/* Abstract Geometric Animation */}
         <motion.div
-          className="absolute w-24 h-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full opacity-70 animate-[move_4s_linear_infinite]"
-          style={{ top: "30%", left: "15%" }}
+          className="absolute w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-70 animate-[move_4s_linear_infinite]"
+          style={{ top: "10%", left: "15%" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 2 }}
@@ -68,12 +69,12 @@ export default function AboutPage() {
       {/* Right Side: Text and Content */}
       <div className="w-1/2 h-full flex flex-col justify-center items-start pl-12 space-y-8 relative z-10">
         <motion.h1
-          className="text-6xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"
+          className="text-6xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 1 }}
         >
-          About Ali Jan
+          About Ali_Jan 🎗
         </motion.h1>
 
         {/* Typing Effect */}
@@ -81,7 +82,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="text-2xl text-gray-300 font-medium whitespace-pre-line max-w-lg"
+          className="text-2xl text-gray-300 font-medium whitespace-pre-line w-full"
         >
           {displayText}
         </motion.div>
@@ -135,6 +136,10 @@ export default function AboutPage() {
               <Folder size={24} />
               <a href="/portfolio" className="text-lg">Portfolio</a>
             </li>
+            <li className="flex items-center space-x-3">
+              <FaSignInAlt size={24} />
+              <a href="/sign-in" className="text-lg">Sign-in</a>
+            </li>
           </ul>
         </div>
       </motion.div>
@@ -146,7 +151,7 @@ export default function AboutPage() {
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.3 }}
       >
-        <Pen size={32} />
+        <FaBars size={32} />
       </motion.button>
     </div>
   );

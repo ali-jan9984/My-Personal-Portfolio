@@ -1,40 +1,45 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-export { default } from "next-auth/middleware";
 import { getToken } from 'next-auth/jwt';
- 
+
+// Middleware function
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
   const url = request.nextUrl;
+
+  // Redirect unauthenticated users trying to access protected routes
   if (!token) {
-      if (
-          url.pathname.startsWith("/dashboard")||
-          url.pathname.startsWith("/verify")
-      ) {
-          return NextResponse.redirect(new URL('/sign-in', request.url));
-      }
+    if (
+      url.pathname.startsWith("/dashboard") ||
+      url.pathname.startsWith("/verify") ||
+      url.pathname.startsWith("/contact")
+    ) {
+      return NextResponse.redirect(new URL('/sign-in', request.url));
+    }
   }
-  // If user is signed in, prevent them from accessing auth routes
+
+  // Redirect authenticated users away from auth-related routes
   if (
-      token &&
-      (   url.pathname.startsWith("/sign-in") ||
-          url.pathname.startsWith("/sign-up") ||
-          url.pathname.startsWith("/verify"))
+    token &&
+    (
+      url.pathname.startsWith("/sign-in") ||
+      url.pathname.startsWith("/sign-up") ||
+      url.pathname.startsWith("/verify")
+    )
   ) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-  if(!token  && url.pathname.startsWith('/dashboard')){
-    return NextResponse.redirect(new URL('/sign-in',request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return NextResponse.next(); // Allow other routes to proceed
-} 
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: ['/sign-in',
-    '/sign-up',
-    '/',
-    '/dashboard/:path',
-    '/verify/:path'
-  ],
 }
+
+// Config to specify the routes middleware should match
+export const config = {
+  matcher: [
+    '/sign-in',
+    '/sign-up',
+    '/contact',
+    '/dashboard/:path*',
+    '/verify/:path*',
+  ],
+};
