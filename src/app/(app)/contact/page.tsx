@@ -8,7 +8,6 @@ import { useEffect } from "react";
 export default function ContactPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-
   // Redirect to login if not authenticated
   useEffect(() => {
     if (status === "unauthenticated") {
