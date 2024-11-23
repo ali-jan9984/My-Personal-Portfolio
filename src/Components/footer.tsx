@@ -16,7 +16,6 @@ const Footer = () => {
             <li><a href="#terms-of-service" className="hover:text-blue-500 transition duration-300">Terms of Service</a></li>
           </ul>
         </div>
-
         {/* Socials Section */}
         <div>
           <h2 className="text-xl font-bold mb-2 text-white">Connect with Me</h2>
@@ -35,7 +34,6 @@ const Footer = () => {
             </a>
           </div>
         </div>
-
         {/* Footer Bottom Section */}
         <div className="mt-8 lg:mt-0 flex flex-col sm:flex-row justify-between items-center border-t pt-4 border-gray-600">
           <span className="text-sm text-center sm:text-left">

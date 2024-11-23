@@ -1,6 +1,6 @@
 'use client';
 import { motion } from "framer-motion";
-import { Pen, Folder, Github, Linkedin } from 'lucide-react'; // Icons for portfolio-related items
+import { Pen, Folder, Github, Linkedin } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { FaBars, FaSignInAlt } from "react-icons/fa";
 
@@ -24,7 +24,6 @@ export default function AboutPage() {
 
   return (
     <div className="relative w-full h-screen bg-black text-white overflow-hidden flex">
-      
       {/* Left Side: Animated High-Class Visualization */}
       <div className="w-1/2 h-full flex flex-col justify-center items-center relative space-y-6">
         {/* Animated Lines or Bars - Abstract Representation */}
@@ -65,7 +64,6 @@ export default function AboutPage() {
           transition={{ delay: 1.5, duration: 2 }}
         ></motion.div>
       </div>
-
       {/* Right Side: Text and Content */}
       <div className="w-1/2 h-full flex flex-col justify-center items-start pl-12 space-y-8 relative z-10">
         <motion.h1
@@ -115,7 +113,6 @@ export default function AboutPage() {
           <a href="/" className="text-blue-500 hover:underline text-lg">Back to Home</a>
         </motion.div>
       </div>
-
       {/* Sidebar Transition */}
       <motion.div
         className={`fixed top-0 left-0 z-20 bg-gray-800 text-white w-64 h-full ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}
@@ -140,10 +137,12 @@ export default function AboutPage() {
               <FaSignInAlt size={24} />
               <a href="/sign-in" className="text-lg">Sign-in</a>
             </li>
+            <li className="flex items-center space-x-3">
+              <a href="/chart">Chart</a>
+            </li>
           </ul>
         </div>
       </motion.div>
-
       {/* Button to open sidebar */}
       <motion.button
         onClick={() => setSidebarOpen(true)}

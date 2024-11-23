@@ -31,22 +31,20 @@ function Navbar() {
       className={`fixed top-0 left-0 w-full z-50 backdrop-blur-md transition-all duration-500 ${
         isDarkMode
           ? "bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700" // Dark mode: Dark and Neutral
-          : "bg-gradient-to-r from-blue-800 via-purple-700 to-indigo-600" // Light mode: Sophisticated and Professional
+          : "bg-gradient-to-tr from-slate-300 via-slate-400 to-slate-500" 
       } shadow-xl transform-gpu`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between p-5">
         {/* Logo with Neon Effect */}
         <Link href="/" className="text-2xl font-bold text-white neon-effect">
-          MyPortfolio
+          MyPortfolio =>(Ali_Jan)
         </Link>
-
         {/* Hamburger Menu */}
         <div className="flex md:hidden">
           <button onClick={toggleMenu} className="text-3xl text-white neon-effect">
             {isOpen ? "✖" : "☰"}
           </button>
         </div>
-
         {/* Links */}
         <div
           className={`flex-col md:flex md:flex-row md:items-center w-full md:w-auto space-y-5 md:space-y-0 transition-all duration-500 ${
@@ -59,7 +57,7 @@ function Navbar() {
               href={link.path}
               className={`text-lg flex items-center gap-3 py-2 px-4 rounded-full transition-all duration-300 transform hover:scale-110 hover:text-gold-500 ${
                 pathname === link.path
-                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white" // Active: Luxury with purple-blue blend
+                  ? "bg-gradient-to-t from-slate-400 to-slate-500 text-white"
                   : "text-white"
               }`}
               onClick={() => setIsOpen(false)}
@@ -69,7 +67,6 @@ function Navbar() {
             </Link>
           ))}
         </div>
-
         {/* Dark Mode Toggle with Glowing Effect */}
         <button
           onClick={toggleDarkMode}

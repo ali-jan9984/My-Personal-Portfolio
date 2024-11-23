@@ -10,17 +10,13 @@ import userModel from "@/models/user.model";
 import { User } from "next-auth";
 import { MongoClient } from "mongodb";
 
-
 if(!process.env.MONGODB_URI){
   throw new Error("MONGODB_URI is not defined");
 }
-
 const client = new MongoClient(process.env.MONGODB_URI || "",{
   serverSelectionTimeoutMS: 30000,
 });
 const clientPromise = client.connect();
-
-
 
 // Define the NextAuth configuration
 export const AuthOptions: NextAuthOptions = {
@@ -49,9 +45,9 @@ export const AuthOptions: NextAuthOptions = {
         }
 
         return {
-          _id: user._id?.toString() || "",
+          id: user._id?.toString() || "",
           email: user.email,
-          userName: user.userName
+          userName: user.userName,
         };
       },
     }),
@@ -104,7 +100,7 @@ export const AuthOptions: NextAuthOptions = {
       return token;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || "your-secret-key",
+  secret: process.env.NEXTAUTH_SECRET || "",
 };
 
 // Wrap the NextAuth function to handle HTTP requests

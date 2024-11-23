@@ -1,8 +1,6 @@
 "use client"
-
 import * as React from "react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
-
 import {
   Card,
   CardContent,
@@ -68,7 +66,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function Updown() {
+export default function Updown() {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("desktop")
 
   const total = React.useMemo(
