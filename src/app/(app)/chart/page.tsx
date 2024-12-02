@@ -1,21 +1,21 @@
 "use client"
-import * as React from "react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import React from "react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
-export const description = "An interactive bar chart"
+const description = "An interactive bar chart"
 
 // Updated data with current dates up to November 11, 2024
 const chartData = [
@@ -66,7 +66,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function Updown() {
+export default function Chart() {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("desktop")
 
   const total = React.useMemo(
@@ -76,7 +76,6 @@ export default function Updown() {
     }),
     []
   )
-
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
