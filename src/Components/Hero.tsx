@@ -1,154 +1,80 @@
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FaTree, FaLeaf, FaRocket, FaMeteor, FaStar, FaSpaceShuttle, FaFish, FaWater, FaSun } from 'react-icons/fa';
-import alijanImage from '../../public/alijan.jpg';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-const themes:any = {
-  space: {
-    name: 'Space',
-    background: 'bg-gradient-to-b from-black via-purple-900 to-blue-900',
-    icons: [FaRocket, FaMeteor, FaStar, FaSpaceShuttle],
-    colors: 'text-red-300'
-  },
-  forest: {
-    name: 'Forest',
-    background: 'bg-gradient-to-b from-green-800 to-green-500',
-    icons: [FaTree, FaLeaf, FaTree, FaLeaf],
-    colors: 'text-green-900'
-  },
-  ocean: {
-    name: 'Ocean',
-    background: 'bg-gradient-to-b from-blue-600 to-teal-500',
-    icons: [FaFish, FaWater, FaStar, FaFish],
-    colors: 'text-blue-300'
-  },
-  desert: {
-    name: 'Desert',
-    background: 'bg-gradient-to-b from-yellow-700 to-orange-500',
-    icons: [FaSun, FaTree, FaStar, FaLeaf],
-    colors: 'text-yellow-500'
-  }
-};
+'use client'; // Mark this file as a client component
 
-const Hero = () => {
-  const [currentTheme, setCurrentTheme] = useState('space');
+import React, { useEffect } from "react";
 
-  const toggleTheme = () => {
-    const themeKeys = Object.keys(themes);
-    const nextThemeIndex = (themeKeys.indexOf(currentTheme) + 1) % themeKeys.length;
-    setCurrentTheme(themeKeys[nextThemeIndex]);
-  };
-  // there is an issue with our 
- 
-  const theme = themes[currentTheme] as any; 
+function Hero() {
+  useEffect(() => {
+    // Adding a simple animation to icons in the background (you can replace this with other animation logic if needed)
+    const icons = document.querySelectorAll('.background-icon');
+    icons.forEach((icon, index) => {
+      icon.style.animationDelay = `${index * 2}s`; // Stagger animation for each icon
+    });
+  }, []);
+
   return (
-    <div
-      className={`relative min-h-screen overflow-hidden ${theme.background} text-white flex flex-col items-center`}
-    >
-      {/* Background Animation Icons */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute bg-white rounded-full opacity-50"
-            style={{
-              width: `${Math.random() * 2 + 1}px`,
-              height: `${Math.random() * 2 + 1}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
-            transition={{ repeat: Infinity, duration: 6 + Math.random() * 5 }}
-          />
-        ))}
+    <section className="relative flex flex-col items-center justify-center text-center py-16 px-8 bg-gray-900 text-white overflow-hidden">
+      
+      {/* Background icons animation */}
+      <div className="absolute top-0 left-0 w-full h-full z-0">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="background-icon absolute animate-pulse opacity-20 transform translate-x-12 translate-y-12 text-6xl text-gray-600">
+            &#9733; {/* Star Icon */}
+          </div>
+          <div className="background-icon absolute animate-bounce opacity-20 transform translate-x-24 translate-y-24 text-6xl text-gray-600">
+            &#9734; {/* Star Outline Icon */}
+          </div>
+          <div className="background-icon absolute animate-ping opacity-20 transform translate-x-36 translate-y-36 text-6xl text-gray-600">
+            &#9733; {/* Star Icon */}
+          </div>
+        </div>
       </div>
 
-      {/* Moving Icons */}
-      <div className="absolute inset-0 pointer-events-none z-10">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={`absolute ${theme.colors} opacity-70`}
-            style={{
-              fontSize: `${Math.random() * 24 + 16}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{ y: [0, -20, 20, 0], x: [0, -10, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 10 + Math.random() * 10 }}
-          >
-            {theme.icons[i % theme.icons.length]()}
-          </motion.div>
-        ))}
+      {/* Main Content */}
+      <h1 className="text-5xl font-extrabold mb-4 animate__animated animate__fadeIn animate__delay-1s z-10">Hey friends —</h1>
+      <p className="text-2xl mb-4 font-semibold opacity-80 animate__animated animate__fadeIn animate__delay-1.5s z-10">
+        I’m Ali. Welcome to my learning journey!
+      </p>
+      <p className="text-lg mb-6 opacity-70 animate__animated animate__fadeIn animate__delay-2s z-10">
+        I’m a learner, and this site is where I share my progress, knowledge, and the tools that help me learn and grow every day.
+      </p>
+      
+      {/* YouTube video with hover effect */}
+      <div className="w-full max-w-3xl mb-8 rounded-xl overflow-hidden shadow-xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl z-10">
+        <iframe
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/YZ_rRAdT73s?start=201"
+          title="YouTube video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
       </div>
+      
+      <p className="text-lg mb-4 animate__animated animate__fadeIn animate__delay-2.5s z-10">
+        Sign up below to join my growing learning community.
+      </p>
+      
+      {/* Enhanced Newsletter Signup */}
+      <form className="mt-6 flex flex-col items-center space-y-4 animate__animated animate__fadeIn animate__delay-3s z-10">
+        <input
+          type="email"
+          placeholder="Email address"
+          className="px-6 py-3 border-2 border-gray-600 rounded-lg mb-4 w-full max-w-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 shadow-lg transform hover:scale-105"
+        />
+        <button className="bg-blue-500 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 z-10">
+          Subscribe
+        </button>
+      </form>
 
-      {/* Content Section */}
-      <section className="relative z-20 flex flex-col md:flex-row items-center min-h-screen p-8">
-        {/* Left Side - Profile Image */}
-        <div className="flex flex-col items-center md:items-start w-full md:w-1/2  md:mb-10 mb-10">
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 1 }}
-    className="relative w-32 mt-20 h-32 md:w-48 md:h-48 lg:w-80 lg:h-80 rounded-full overflow-hidden shadow-xl border-4 border-yellow-500"
-  >
-    <Image
-      src={alijanImage}
-      alt="Ali Jan"
-      layout="fill"
-      objectFit="cover"
-      className="rounded-full"
-    />
-  </motion.div>
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="mt-6"
-          >
-            <Button onClick={toggleTheme} className="bg-yellow-500 text-black font-semibold rounded-full shadow-md hover:bg-yellow-600 transition">
-              Switch to {themes[Object.keys(themes).find((key) => key !== currentTheme)as string]?.name} Theme
-            </Button>
-          </motion.div>
-        </div>
-
-        {/* Right Side - Text Section */}
-        <div className="text-center md:text-left md:w-1/2 space-y-6">
-          <motion.h1
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="text-4xl md:text-5xl font-extrabold leading-snug"
-          >
-            Welcome to the <span className="text-yellow-400">{theme.name} Adventure</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-            className="text-lg italic text-gray-300"
-          >
-            {theme.name === 'Space'
-              ? 'Exploring the cosmos of digital creativity.'
-              : theme.name === 'Forest'
-              ? 'Uncovering the serenity of technology and nature.'
-              : theme.name === 'Ocean'
-              ? 'Diving into the depths of innovation.'
-              : 'Embracing the warmth of digital landscapes.'}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="text-sm font-light text-white"
-          >
-            Full Stack Developer | Crafting experiences that bridge imagination and reality.
-          </motion.p>
-        </div>
-      </section>
-    </div>
+      {/* Ultimate Guides Link */}
+      <div className="mt-8 z-10">
+        <a href="/ultimate-guides" className="text-lg font-semibold text-gray-400 hover:text-white transition-colors duration-300">
+          Check out my Ultimate Guides
+        </a>
+      </div>
+    </section>
   );
-};
+}
 
 export default Hero;

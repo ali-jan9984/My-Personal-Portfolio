@@ -52,8 +52,8 @@ export const AuthOptions: NextAuthOptions = {
       },
     }),
     GithubProvider({
-      clientId: process.env.GITHUB_ID || "",
-      clientSecret: process.env.GITHUB_SECRET || "",
+      clientId: "Ov23liU0oIm7wfXe32E2",
+      clientSecret:"d73015154c6a7a58ce6ed800ca65fcad90dd6eee",
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID || "",

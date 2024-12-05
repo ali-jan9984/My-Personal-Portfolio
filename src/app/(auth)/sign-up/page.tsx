@@ -7,7 +7,7 @@ import { useDebounceCallback } from 'usehooks-ts';
 import axios, { AxiosError } from 'axios';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
-const Page = () => {
+const SignUpPage = () => {
   const [userName, setUserName] = useState("");
   const [userNameMessage, setUserNameMessage] = useState("");
   const [isCheckingUserName, setIsCheckingUserName] = useState(false);
@@ -18,9 +18,7 @@ const Page = () => {
   const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
   useEffect(() => {
     const checkUserName = async () => {
@@ -28,8 +26,8 @@ const Page = () => {
         setIsCheckingUserName(true);
         setUserNameMessage("");
         try {
-          const response = await axios.get(`/api/check-userName-unique?userName=${userName}`);
-          setUserNameMessage(response.data.message);
+          const response = await axios.get(`/api/check-username?username=${userName}`);
+          setUserNameMessage(response.data.message || "Username is available");
         } catch (error) {
           const err = error as AxiosError<{ message: string }>;
           setUserNameMessage(err.response?.data.message ?? "Something went wrong");
@@ -45,56 +43,71 @@ const Page = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(`/api/sign-up`, data);
-      setIsSubmitting(false);
       toast({
         title: "Success",
-        description: response.data.message
+        description: response.data.message,
       });
-      router.replace(`/sign-in`);
+      router.push(`/sign-in`);
     } catch (error) {
-      const errorMessage = axios.isAxiosError(error) ? error.response?.data.message || "Something went wrong" : "Unexpected error occurred";
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data.message || "Something went wrong"
+        : "Unexpected error occurred";
       toast({
         title: "Sign-up failed",
         description: errorMessage,
         variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8 space-y-6">
-        <h2 className="text-3xl font-semibold text-center text-gray-800">Create Your Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
+      <div className="max-w-lg w-full bg-white rounded-lg shadow-lg p-8">
+        <h1 className="text-2xl font-bold text-center text-gray-800">Sign Up</h1>
+        <p className="text-center text-gray-600 mb-6">Create an account to get started</p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Username */}
           <div>
-            <label className="block text-gray-700 font-medium">Username</label>
+            <label className="block font-medium text-gray-700">Username</label>
             <input
-              {...register("userName", { required: "Username is required", minLength: 3 })}
+              {...register("username", { required: "Username is required", minLength: 3 })}
               value={userName}
               onChange={(e) => debounceUser(e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg ${errors.userName ? 'border-red-500' : 'border-gray-300'}`}
-              type="text"
+              className={`w-full px-4 py-2 border rounded-md ${errors.username ? "border-red-500" : "border-gray-300"}`}
             />
-            {isCheckingUserName ? <p className="text-blue-600">Checking...</p> : <p className="text-sm text-gray-600">{userNameMessage}</p>}
-            {errors.userName && <p className="text-sm text-red-500">{errors.userName.message as string}</p>}
+            <p className={`text-sm ${isCheckingUserName ? "text-blue-600" : "text-gray-500"}`}>
+              {isCheckingUserName ? "Checking availability..." : userNameMessage}
+            </p>
+            {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>}
           </div>
+
+          {/* Email */}
           <div>
-            <label className="block text-gray-700 font-medium">Email</label>
+            <label className="block font-medium text-gray-700">Email</label>
             <input
-              {...register("email", { required: "Email is required", pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" } })}
-              className={`w-full px-4 py-2 border rounded-lg ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+              {...register("email", {
+                required: "Email is required",
+                pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" },
+              })}
               type="email"
+              className={`w-full px-4 py-2 border rounded-md ${errors.email ? "border-red-500" : "border-gray-300"}`}
             />
-            {errors.email && <p className="text-sm text-red-500">{errors.email.message as string}</p>}
+            {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
+
+          {/* Password */}
           <div>
-            <label className="block text-gray-700 font-medium">Password</label>
+            <label className="block font-medium text-gray-700">Password</label>
             <div className="relative">
               <input
-                {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
-                className={`w-full px-4 py-2 border rounded-lg ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Password must be at least 6 characters" },
+                })}
                 type={showPassword ? "text" : "password"}
+                className={`w-full px-4 py-2 border rounded-md ${errors.password ? "border-red-500" : "border-gray-300"}`}
               />
               <button
                 type="button"
@@ -104,18 +117,22 @@ const Page = () => {
                 {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
               </button>
             </div>
-            {errors.password && <p className="text-sm text-red-500">{errors.password.message as string}</p>}
+            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className={`w-full py-2 px-4 text-white font-semibold rounded-lg transition duration-300 ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+            className={`w-full py-2 px-4 text-white font-semibold rounded-lg ${
+              isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            }`}
             disabled={isSubmitting}
           >
             {isSubmitting ? (
-              <span className="flex justify-center items-center space-x-2">
-                <span className="loader inline-block w-5 h-5 border-2 border-t-transparent rounded-full animate-spin"></span>
-                <span>Signing up...</span>
-              </span>
+              <div className="flex items-center justify-center">
+                <span className="loader inline-block w-5 h-5 border-2 border-t-transparent rounded-full animate-spin mr-2"></span>
+                Signing Up...
+              </div>
             ) : (
               "Sign Up"
             )}
@@ -126,4 +143,5 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SignUpPage;
+
